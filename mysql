@@ -1,8 +1,0 @@
-http://fermentationriot.com/images/SQL%20table.jpg
-
-
-Now we need to create an SQL database and create a table with the following column structure:
-
-Name the table "temp".
-
-- See more at: http://fermentationriot.com/arduinopid.php#sthash.3voJRpbo.dpuf
