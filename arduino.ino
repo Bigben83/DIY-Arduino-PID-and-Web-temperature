@@ -1,3 +1,4 @@
+
 #include <OneWire.h>
 #include <SPI.h>
 #include <Ethernet.h>
@@ -10,10 +11,11 @@ double Input, Output;
 
 int sensorPin = A5; // select the input pin for the potentiometer
 int sensorValue = 0; // variable to store the value coming from the sensor
+
 //Specify the links and initial tuning parameters
 
 float Kp = 200;
-float Ki = 50; 
+float Ki = 50;
 float Kd = 0;
 
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
@@ -34,11 +36,11 @@ int inputPin = A0;
 OneWire ds(DS18S20_Pin); // on digital pin 10
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
-byte mac[] = { 0x90, 0xa4, 0xdr, 0x00, 0xa5, 0x59 }; //I made one up here it should be listed on your ethernet shield box
-IPAddress server(184, 188, 16, 158); // place your server IP address here, I made on up
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //I made one up here it should be listed on your ethernet shield box
+IPAddress server(10, 0, 0, 19); // place your server IP address here, I made on up
 
 // Initialize the Ethernet client library
-// with the IP address and port of the server 
+// with the IP address and port of the server
 // that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
 
@@ -56,7 +58,7 @@ myPID.SetOutputLimits(0, WindowSize);
 myPID.SetMode(AUTOMATIC);
 
 for (int thisReading = 0; thisReading < numReadings; thisReading++)
-readings[thisReading] = 0; 
+readings[thisReading] = 0;
 
 analogReference(EXTERNAL);
 }
@@ -66,25 +68,25 @@ analogReference(DEFAULT);
 sensorValue = analogRead(sensorPin)/7.42+75;
 Setpoint = sensorValue;
 analogReference(EXTERNAL);
-total= total - readings[index]; 
+total= total - readings[index];
 float temperature = getTemp()*9/5+32;
 readings[index] = temperature;
-total= total + readings[index]; 
+total= total + readings[index];
 
-index = index + 1; 
+index = index + 1;
 
 // if we're at the end of the array...
-if (index >= numReadings) 
+if (index >= numReadings)
 // ...wrap around to the beginning:
 index = 0;
 
 // calculate the average:
-Input = total / numReadings; 
+Input = total / numReadings;
 // send it to the computer as ASCII digits
 
 myPID.Compute();
 
-
+/*
 Serial.print(Input*1);
 Serial.print(" ");
 Serial.print(Output);
@@ -102,7 +104,7 @@ Serial.print(" ");
 
 Serial.println(temperature);
 
- 
+ */
 
 /************************************************
 * turn the output pin on/off based on pid output
@@ -114,19 +116,19 @@ windowStartTime += WindowSize;
 if(Output < millis() - windowStartTime) digitalWrite(RelayPin,LOW);
 else digitalWrite(RelayPin,HIGH);
 
-if (index == 29) 
+if (index == 29)
 {
 
-(Ethernet.begin(mac)); 
+(Ethernet.begin(mac));
 // give the Ethernet shield a second to initialize:
-delay(1000); 
+delay(1000);
 Serial.println("connecting...");
 
 // if you get a connection, report back via serial:
-(client.connect(server, 80));
+(client.connect("ciuperci.orc.md", 80));
 Serial.println("connected");
 // Make a HTTP request:
-client.print("GET http://example.com/data.php?Temperature="); //place your server address here
+client.print("GET http://ciuperci.orc.md/pid/data.php?Temperature="); //place your server address here
 client.print(temperature);
 client.print("&Setpoint=");
 client.print(Setpoint);
@@ -141,11 +143,12 @@ client.print(Kd);
 client.print("&Heater=");
 client.print(Output/WindowSize*100);
 client.println(" HTTP/1.0");
-client.println("Host: http://example.com");
+client.println("Host: http://ciuperci.orc.md");
 client.println();
 client.stop();
 }
 }
+
 float getTemp(){
 //returns the temperature from one DS18S20 in DEG Celsius
 
@@ -177,6 +180,7 @@ delay(1000);
 byte present = ds.reset();
 ds.select(addr);
 ds.write(0xBE); // Read Scratchpad
+
 for (int i = 0; i < 9; i++) { // we need 9 bytes
 data[i] = ds.read();
 }
@@ -192,5 +196,3 @@ float TemperatureSum = tempRead / 16;
 return TemperatureSum;
 
 }
-
-- See more at: http://fermentationriot.com/arduinopid.php#sthash.3voJRpbo.dpuf
