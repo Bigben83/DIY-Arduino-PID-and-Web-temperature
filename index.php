@@ -269,8 +269,8 @@
 	}
 </script>
 
-  <link rel="stylesheet" href="client-assets/css/alux.min.css">
-  <link rel="stylesheet" href="client-assets/css/alux.css">
+  <link rel="stylesheet" href="alux.min.css">
+  <link rel="stylesheet" href="alux.css">
   <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
   
 </head>
