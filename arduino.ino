@@ -19,9 +19,9 @@ Proportional Integral Derivative Controller
 #include <PID_v1.h>
 #include <PID_AutoTune_v0.h>
 
-
+// Output Relay
 #define RelayPin 6
-
+/********************************************************************/
 // ************************************************
 // PID Variables and constants
 // ************************************************
@@ -34,12 +34,15 @@ int sensorValue = 0; // variable to store the value coming from the sensor
 
 //Specify the links and initial tuning parameters
 
+// pid tuning parameters
 float Kp = 200;
 float Ki = 50;
 float Kd = 0;
 
+//Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
+// 2 second Time Proportional Output window
 int WindowSize = 2000;
 unsigned long windowStartTime;
 
