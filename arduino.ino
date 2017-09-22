@@ -1,10 +1,30 @@
+/*
+Proportional Integral Derivative Controller 
+*/
 
+/********************************************************************/
+// Libraries for the DS18B20 Temperature Sensor
 #include <OneWire.h>
+#include <DallasTemperature.h>
+
+#include <Wire.h>
 #include <SPI.h>
 #include <Ethernet.h>
+
+// Libraries for the LCD Sheild
+#include <LCD.h>
+#include <LiquidCrystal_I2C.h> // F Malpartida's NewLiquidCrystal library
+
+// PID Library
 #include <PID_v1.h>
+#include <PID_AutoTune_v0.h>
+
+
 #define RelayPin 6
 
+// ************************************************
+// PID Variables and constants
+// ************************************************
 int DS18S20_Pin = 2; //DS18S20 Signal pin on digital 2
 double Setpoint;
 double Input, Output;
